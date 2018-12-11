@@ -16,9 +16,9 @@ class Motor:
         self.basicInstruction = "G17 G21 G91 G54 "
         # unit cm s
         self.step = 1 # default step 1cm/step
-        self.vel2 = 1.0389
-        self.vel3 = 1.5166  # these speed are measured, unit cm/s, I use vel3 as default to calculate time
-        self.vel4 = 1.9367
+        self.vel2 = 1.0231
+        self.vel3 = 1.4935  # these speed are measured, unit cm/s, I use vel3 as default to calculate time
+        self.vel4 = 1.9072
         # need measurement
         self.upperBoundx = 10
         self.upperBoundy = 10
