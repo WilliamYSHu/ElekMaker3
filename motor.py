@@ -11,21 +11,23 @@ class Motor:
         self.port = port  # string specifying serial port, ex: "/dev/ttyUSB0"
         self.ser = None  # the serial port that will be opened and closed during operation
         self.isopen = False  # is the serial port open
-        self.pos = None  # current motor position
-        self.step = None  # current step size of motor
-        self.natstep = 3.17 # commandstep/cm. measured. default in gcode
-        self.vel2 = None
-        self.vel3 = None
-        self.vel4 = None
-        self.upperBoundx = None  # boundary of absolute position which one will not move past
-        self.upperBoundy = None
-        self.lowerBoundx = None  # same but on the lower end
-        self.lowerBoundy = None
+        self.pos = (0,0)  # current motor position
+        self.natstep = 3.211 # commandstep/cm. measured. default in gcode
         self.basicInstruction = "G17 G21 G91 G54 "
+        # unit cm s
+        self.step = 1 # default step 1cm/step
+        self.vel2 = 1.0389
+        self.vel3 = 1.5166  # these speed are measured, unit cm/s, I use vel3 as default to calculate time
+        self.vel4 = 1.9367
+        # need measurement
+        self.upperBoundx = 10
+        self.upperBoundy = 10
+        self.lowerBoundx = 0
+        self.lowerBoundy = 0
 
     def __str__(self):
+        st = ''
         if (self.isopen):
-            self.loadAttributes()
             st += "Port: " + self.port + "\n"
             st += "Position: " + self.pos + " step \n"
             st += "Step: " + self.step + " cm\step \n"
@@ -53,7 +55,7 @@ class Motor:
     def takeCor(self,x0,y0):
         if (self.isopen):
             if x0 > self.upperBoundx or x0 < self.lowerBoundx or y0 > self.upperBoundy or y0 < self.lowerBoundy:
-                print("input out of limit\nnothing change")
+                print "your move instruction is out of bounds.\nNo change made. Either change your origin or change your bounds"
                 return
             x_disp = (x0 - self.pos[0])*self.step
             y_disp = (y0 - self.pos[1])*self.step
@@ -125,20 +127,7 @@ class Motor:
         if (b == True):
             self.ser.flush()
             self.isopen = True
-            # unit cm s
-            self.pos = (0, 0)
-            self.step = 1 # default step 1cm/step
-            self.vel2 = 1.0389
-            self.vel3 = 1.5166  # these speed are measured, unit cm/s, I use vel3 as default to calculate time
-            self.vel4 = 1.9367
-            # need measurement
-            self.upperBoundx = 10
-            self.upperBoundy = 10
-            self.lowerBoundx = 0
-            self.lowerBoundy = 0
             print("Motor communication port has been opened")
-            # if this is the first time opening communications,
-            # initialize all of the class attributes
         else:
             self.isopen = False
             print("Could not open motor serial port, please check serial configuration")

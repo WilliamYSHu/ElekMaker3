@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import os
 import serial
 import sys
@@ -10,7 +9,7 @@ global motorSer
 motorSer = "/dev/ttyUSB0"
 
 
-def main():
+if __name__ == "__main__": 
 
     # define the motor class
     mot = motor.Motor(motorSer)
@@ -33,5 +32,3 @@ def main():
 
     # close the serial
     mot.motorClose()
-
-if __name__ == "__main__": main()
